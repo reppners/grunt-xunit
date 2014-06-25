@@ -1,6 +1,4 @@
 node_modules
-test/Tests/Tests.userprefs
-test/Tests/Passing/bin
-test/Tests/Passing/obj
-test/Tests/Failing/bin
-test/Tests/Failing/obj
+test/Fixtures/*.userprefs
+test/Fixtures/*/bin
+test/Fixtures/*/obj
