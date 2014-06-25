@@ -1,15 +1,14 @@
 {
   "name": "grunt-xunit",
   "version": "0.1.0",
-  "description": "xUnit test runner",
+  "description": "Run xUnit tests using Grunt",
   "homepage": "https://github.com/jgillich/grunt-xunit",
   "repository": {
     "type": "git",
     "url": "https://github.com/jgillich/grunt-xunit.git"
   },
-  "main": "tasks/xunit.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt test"
   },
   "author": "Jakob Gillich <jakob@gillich.me>",
   "license": "ISC",
