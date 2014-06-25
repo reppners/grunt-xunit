@@ -1,27 +1,3 @@
-/*
-xUnit.net console test runner (64-bit .NET 4.0.30319.18444)
-Copyright (C) 2013 Outercurve Foundation.
-
-usage: xunit.console.clr4 <xunitProjectFile> [options]
-usage: xunit.console.clr4 <assemblyFile> [configFile] [options]
-
-Valid options:
-  /silent                : do not output running test count
-  /teamcity              : forces TeamCity mode (normally auto-detected)
-  /wait                  : wait for input after completion
-  /trait "name=value"    : only run tests with matching name/value traits
-                         : if specified more than once, acts as an OR operation
-  /-trait "name=value"   : do not run tests with matching name/value traits
-                         : if specified more than once, acts as an AND operation
-
-
-Valid options for assemblies only:
-  /noshadow              : do not shadow copy assemblies
-  /xml <filename>        : output results to Xunit-style XML file
-  /html <filename>       : output results to HTML file
-  /nunit <filename>      : output results to NUnit-style XML file
-*/
-
 var path            = require('path'),
     child_process   = require('child_process'),
     _               = require('underscore');
