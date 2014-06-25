@@ -11,7 +11,7 @@ module.exports = function (grunt) {
         },
         msbuild: {
             tests: {
-                src: ['test/Tests/**/*.csproj'],
+                src: ['test/Fixtures/**/*.csproj'],
                 options: {
                     projectConfiguration: 'Debug',
                     targets: ['Build'],
