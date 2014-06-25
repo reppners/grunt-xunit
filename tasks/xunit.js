@@ -38,9 +38,7 @@ module.exports = function (grunt) {
 
         async.series(this.files.map(function (file) {
             return function (callback) { test(file.src, callback); };
-        }).concat([function (callback) {
-            fs.unlink(options.xml, callback);
-        }]), this.async());
+        }), this.async());
 
         function test (file, callback) {
             var command = [path.resolve(options.runner + ''), path.resolve(file + ''), xunitOptions],
