@@ -1,0 +1,24 @@
+{
+  "name": "grunt-xunit",
+  "version": "0.1.0",
+  "description": "xUnit test runner",
+  "homepage": "https://github.com/jgillich/grunt-xunit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jgillich/grunt-xunit.git"
+  },
+  "main": "tasks/xunit.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jakob Gillich <jakob@gillich.me>",
+  "license": "ISC",
+  "dependencies": {
+    "underscore": "^1.6.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-mocha-cli": "~1.9.0",
+    "grunt-msbuild": "~0.2.2"
+  }
+}

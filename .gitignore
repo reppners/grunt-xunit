@@ -1,0 +1,6 @@
+node_modules
+test/Tests/Tests.userprefs
+test/Tests/Passing/Debug
+test/Tests/Passing/obj
+test/Tests/Failing/Debug
+test/Tests/Failing/obj
