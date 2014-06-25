@@ -6,7 +6,7 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('xunit', 'Run xUnit tests.', function () {
         var options = this.options({
                 cwd: '',
-                runner: path.resolve(__dirname, '../xunit/xunit.console.clr4.exe')
+                runner: path.resolve(__dirname, '../vendor/xunit/xunit.console.clr4.exe')
             }),
             done = this.async(),
             xunitOptions =
