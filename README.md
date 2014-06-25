@@ -1,4 +1,4 @@
-# grunt-xunit
+# grunt-xunit [![Build Status](https://travis-ci.org/jgillich/grunt-xunit.svg?branch=master)](https://travis-ci.org/jgillich/grunt-xunit)
 
 Run xUnit tests using Grunt.
 
