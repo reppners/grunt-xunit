@@ -5,19 +5,19 @@ namespace Passing
 	public class Tests
 	{
 		[Fact]
-		public void PassOne()
+		public void FailOne()
 		{
 			Assert.False(true);
 		}
 
 		[Fact]
-		public void PassTwo()
+		public void FailTwo()
 		{
 			Assert.False(true);
 		}
 
 		[Fact]
-		public void PassThree()
+		public void FailThree()
 		{
 			Assert.False(true);
 		}
