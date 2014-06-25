@@ -1,22 +1,27 @@
 var path            = require('path'),
     child_process   = require('child_process'),
-    _               = require('underscore');
+    fs              = require('fs'),
+    os              = require('os'),
+    async           = require('async'),
+    _               = require('underscore'),
+    xml2js          = require('xml2js');
 
 module.exports = function (grunt) {
     grunt.registerMultiTask('xunit', 'Run xUnit tests.', function () {
         var options = this.options({
                 cwd: '',
-                runner: path.resolve(__dirname, '../vendor/xunit/xunit.console.clr4.exe')
+                runner: path.resolve(__dirname, '../vendor/xunit/xunit.console.exe'),
+                xml: path.join(os.tmpdir(), _.uniqueId('xunit') + '.xml')
             }),
-            done = this.async(),
+            reporter = require(options.reporter || '../lib/reporters/spec'),
             xunitOptions =
                 _.chain(options)
                 .pick(['silent', 'teamcity', 'wait', 'trait', '-trait', 'noshadow', 'xml', 'html', 'nunit'])
                 .map(function (value, key) {
                     if (typeof value === 'string') {
-                        return '/' + key + ' ' + value;
+                        return '-' + key + ' ' + value;
                     } else if (value) {
-                        return '/' + key;
+                        return '-' + key;
                     } else {
                         return '';
                     }
@@ -31,37 +36,53 @@ module.exports = function (grunt) {
         }
 
 
-        this.files.forEach(function (file) {
-            grunt.log.debug('Processing file ' + file.src);
-            grunt.file.expand({
-                cwd: options.cwd,
-                filter: 'isFile'
-            }, file.src).forEach(function (file) {
+        async.series(this.files.map(function (file) {
+            return function (callback) { test(file.src, callback); };
+        }).concat([function (callback) {
+            fs.unlink(options.xml, callback);
+        }]), this.async());
 
-                var command = [path.resolve(options.runner), path.resolve(file), xunitOptions],
-                    child;
+        function test (file, callback) {
+            var command = [path.resolve(options.runner + ''), path.resolve(file + ''), xunitOptions],
+                child;
 
-                if (process.platform !== 'win32') {
-                    command.unshift('mono');
-                }
+            if (process.platform !== 'win32') {
+                command.unshift('mono');
+            }
 
-                grunt.log.debug('Running command: ' + command);
-                child = child_process.exec(command.join(' '), function (error, stdout, stderr) {
-                    if (error) {
-                        grunt.fail.warn('One or more tests failed');
-                   }
-                });
+            grunt.log.debug('Running command: ' + command.join(' '));
+            child = child_process.exec(command.join(' '));
 
-                child.stdout.on('data', function (chunk) {
-                    grunt.log.write(chunk.toString('utf8'));
-                });
-
-                child.stderr.on('data', function (chunk) {
-                    grunt.log.error(chunk.toString('utf8'));
-                });
-
+            child.stdout.on('data', function (chunk) {
+                grunt.log.debug(chunk.toString('utf8'));
             });
-        });
+
+            child.stderr.on('data', function (chunk) {
+                grunt.log.debug(chunk.toString('utf8'));
+            });
+
+            child.on('exit', function (code) {
+                fs.readFile(options.xml, function (error, xml) {
+                    if(error) {
+                        grunt.fail.warn(error);
+                    }
+
+                    xml2js.parseString(xml, function (error, result) {
+                        if(error) {
+                            grunt.fail.warn(error);
+                        }
+                        reporter(grunt, result);
+
+                        if(code) {
+                            grunt.fail.warn('');
+                        }
+
+                        callback(null);
+                    });
+                });
+            });
+
+        }
 
     });
 };
