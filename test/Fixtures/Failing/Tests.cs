@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Passing
+namespace Failing
 {
 	public class Tests
 	{
