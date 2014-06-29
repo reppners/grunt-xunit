@@ -3,12 +3,10 @@ module.exports = function (grunt) {
     grunt.config.init({
         xunit: {
             passing: {
-                src: 'test/Fixtures/Passing/bin/Debug/Passing.dll',
-                options: { xml: 'passing.xml' }
+                src: 'test/Fixtures/Passing/bin/Debug/Passing.dll'
             },
             failing: {
-                src: 'test/Fixtures/Failing/bin/Debug/Failing.dll',
-                options: { xml: 'failing.xml' }
+                src: 'test/Fixtures/Failing/bin/Debug/Failing.dll'
             }
         },
         msbuild: {
