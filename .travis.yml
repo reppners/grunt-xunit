@@ -2,5 +2,8 @@ language: node_js
 node_js:
   - "0.10"
 before_install:
+  - sudo bash -c "echo deb http://badgerports.org precise main >> /etc/apt/sources.list"
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E1FAD0C
+  - sudo apt-get update
   - sudo apt-get install mono-devel
   - npm install -g grunt-cli
