@@ -135,7 +135,15 @@ module.exports = function (grunt) {
 
                 fs.readFile(options.xml, function (xmlReadError, xml) {
 
-                    if(xmlReadError && !options.continueOnTestfailure) {
+                    if(xmlReadError) {
+
+                        if(options.continueOnTestfailure) {
+
+                            grunt.log.writeln("expected xunit result xml at '" + options.xml + "' but failed to read it: " + xmlReadError);
+                            callback();
+                            return;
+                        }
+
                         grunt.fail.warn('failed to read xunit result xml: ' + xmlReadError);
                     }
 
