@@ -80,6 +80,9 @@ module.exports = function (grunt) {
                         return '';
                     }
                 })
+                .filter(function(value) {
+                    return value;
+                })
                 .value()
                 .join(' ');
 
@@ -107,15 +110,18 @@ module.exports = function (grunt) {
         function test (file, config, callback) {
             var command = [
                     path.resolve(options.runner + ''),
-                    path.resolve(file + ''),
-                    config || '',
-                    xunitOptions
+                    path.resolve(file + '')
                 ],
                 child;
 
             if (process.platform !== 'win32') {
                 command.unshift('mono');
             }
+
+            if(config) {
+                command.push(config)
+            }
+            command.push(xunitOptions);
 
             command = command.join(' ');
 
