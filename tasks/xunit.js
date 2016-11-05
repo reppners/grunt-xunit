@@ -11,7 +11,7 @@ module.exports = function (grunt) {
         var options = this.options({
                 cwd: '',
                 // specify a runner path
-                runner: path.resolve(__dirname, '../vendor/xunit/xunit.console.exe'),
+                runner: path.join(__dirname, '../vendor/xunit/xunit.console.exe'),
                 // specify a path to a xunit config file (xml or json)
                 config: '',
                 // specify a default xml result file for later parsing results in grunt
@@ -100,17 +100,22 @@ module.exports = function (grunt) {
                 // resolve config file path if defined
                 var config;
                 if(options.config) {
-                    config = path.resolve(options.config + '')
+                    config = normalizeFilepath( options.config );
                 }
 
-                test(file.src, config, callback);
+                var src = normalizeFilepath(file.src);
+                test(src, config, callback);
             };
         }), this.async());
 
+        function normalizeFilepath(path) {
+            return '"' + path.normalize( path ) + '"'
+        }
+
         function test (file, config, callback) {
             var command = [
-                    path.resolve(options.runner + ''),
-                    path.resolve(file + '')
+                    normalizeFilepath( options.runner ),
+                    file
                 ],
                 child;
 
@@ -119,7 +124,7 @@ module.exports = function (grunt) {
             }
 
             if(config) {
-                command.push(config)
+                command.push( file )
             }
             command.push(xunitOptions);
 
