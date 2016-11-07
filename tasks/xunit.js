@@ -72,7 +72,8 @@ module.exports = function (grunt) {
                     'html'          // output results to HTML file
                 ])
                 .map(function (value, key) {
-                    if (typeof value === 'string') {
+                    if (typeof value === 'string'
+                        || typeof value === 'number') {
                         return '-' + key + ' ' + value;
                     } else if (value) {
                         return '-' + key;
