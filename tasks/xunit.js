@@ -93,10 +93,10 @@ module.exports = function (grunt) {
             grunt.fail.warn('xUnit Binary not found. Please set the `bin` option to the path of the console runner executeable.');
         }
 
-        ensureDirectoryPresenceForResultOption('xml', options);
-        ensureDirectoryPresenceForResultOption('xmlv1', options);
-        ensureDirectoryPresenceForResultOption('nunit', options);
-        ensureDirectoryPresenceForResultOption('html', options);
+        prepareResultOptionDestination('xml', options);
+        prepareResultOptionDestination('xmlv1', options);
+        prepareResultOptionDestination('nunit', options);
+        prepareResultOptionDestination('html', options);
 
         async.series(this.files.map(function (file) {
 
@@ -136,7 +136,7 @@ module.exports = function (grunt) {
             };
         }), this.async());
 
-        function ensureDirectoryPresenceForResultOption(resultOptionName, options) {
+        function prepareResultOptionDestination(resultOptionName, options) {
 
             var resultFilePath = options[resultOptionName];
 
@@ -144,7 +144,17 @@ module.exports = function (grunt) {
                 return;
             }
 
-            var dir = path.dirname(resultFilePath);
+            var normalizedFilePath = path.normalize(resultFilePath);
+
+            // clean existing result files prior to run the tests so old test results are not picked up if the test fails to execute for some reason
+            if(grunt.file.exists(normalizedFilePath)) {
+                grunt.file.delete(normalizedFilePath, {
+                    // also delete if the file is outside of the cwd
+                    force:true
+                });
+            }
+
+            var dir = path.dirname(normalizedFilePath);
             grunt.file.mkdir(dir);
         }
 
