@@ -11,7 +11,7 @@ module.exports = function (grunt) {
         var options = this.options({
                 cwd: '',
                 // specify a runner path
-                runner: path.resolve(__dirname, '../vendor/xunit/xunit.console.exe'),
+                runner: path.join(__dirname, '../vendor/xunit/xunit.console.exe'),
                 // specify a path to a xunit config file (xml or json)
                 config: '',
                 // specify a default xml result file for later parsing results in grunt
@@ -100,17 +100,45 @@ module.exports = function (grunt) {
                 // resolve config file path if defined
                 var config;
                 if(options.config) {
-                    config = path.resolve(options.config + '')
+                    config = normalizeFilepath( options.config );
                 }
 
-                test(file.src, config, callback);
+                var testDllPathsString = file.src
+                    // check if the test dll exists and warn/fail if not
+                    .filter(function(testDllPath) {
+
+                        if ( grunt.file.exists( testDllPath ) === false ) {
+
+                            var msg = 'Specified test dll file "' + testDllPath + '" not found.';
+
+                            if(options.continueOnTestfailure) {
+                                grunt.log.warn(msg);
+                                return false;
+                            }
+
+                            grunt.fail.warn(msg);
+                        }
+
+                        return true;
+                    })
+                    // normalize and concat all dll paths
+                    .reduce(function(previousValue, testDllPath) {
+
+                        return previousValue + ' ' + normalizeFilepath(testDllPath);
+                    }, '');
+
+                test(testDllPathsString, config, callback);
             };
         }), this.async());
 
-        function test (file, config, callback) {
+        function normalizeFilepath(file) {
+            return '"' + path.normalize( file ) + '"'
+        }
+
+        function test (testDllPathsString, config, callback) {
             var command = [
-                    path.resolve(options.runner + ''),
-                    path.resolve(file + '')
+                    normalizeFilepath( options.runner ),
+                    testDllPathsString
                 ],
                 child;
 
@@ -119,7 +147,7 @@ module.exports = function (grunt) {
             }
 
             if(config) {
-                command.push(config)
+                command.push( config )
             }
             command.push(xunitOptions);
 
