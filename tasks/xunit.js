@@ -92,6 +92,10 @@ module.exports = function (grunt) {
             grunt.fail.warn('xUnit Binary not found. Please set the `bin` option to the path of the console runner executeable.');
         }
 
+        ensureDirectoryPresenceForResultOption('xml', options);
+        ensureDirectoryPresenceForResultOption('xmlv1', options);
+        ensureDirectoryPresenceForResultOption('nunit', options);
+        ensureDirectoryPresenceForResultOption('html', options);
 
         async.series(this.files.map(function (file) {
 
@@ -130,6 +134,18 @@ module.exports = function (grunt) {
                 test(testDllPathsString, config, callback);
             };
         }), this.async());
+
+        function ensureDirectoryPresenceForResultOption(resultOptionName, options) {
+
+            var resultFilePath = options[resultOptionName];
+
+            if(!resultFilePath) {
+                return;
+            }
+
+            var dir = path.dirname(resultFilePath);
+            grunt.file.mkdir(dir);
+        }
 
         function normalizeFilepath(file) {
             return '"' + path.normalize( file ) + '"'
