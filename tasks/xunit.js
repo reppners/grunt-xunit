@@ -185,11 +185,11 @@ module.exports = function (grunt) {
             child = child_process.exec(command);
 
             child.stdout.on('data', function (chunk) {
-                grunt.log.debug(chunk.toString('utf8'));
+                grunt.log.write(chunk.toString('utf8'));
             });
 
             child.stderr.on('data', function (chunk) {
-                grunt.log.debug(chunk.toString('utf8'));
+                grunt.log.write(chunk.toString('utf8'));
             });
 
             child.on('close', function (code) {
