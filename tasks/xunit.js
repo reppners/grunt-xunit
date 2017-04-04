@@ -192,7 +192,7 @@ module.exports = function (grunt) {
                 grunt.log.debug(chunk.toString('utf8'));
             });
 
-            child.on('exit', function (code) {
+            child.on('close', function (code) {
 
                 fs.readFile(options.xml, function (xmlReadError, xml) {
 
